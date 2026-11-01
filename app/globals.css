@@ -1,0 +1,344 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ *
+ * The look borrows from a duty roster pinned to a notice board: photocopy
+ * lilac paper, violet-black ink, one marigold highlighter, tally marks for
+ * volunteer slots, and a ticket stub for every event.
+ * ------------------------------------------------------------------ */
+:root {
+  --paper: #e8e4f3;
+  --paper-deep: #d8d2ea;
+  --sheet: #fbfaff;
+  --ink: #1b1233;
+  --ink-soft: #4d4467;
+  --marigold: #f7b500;
+  --marigold-soft: #ffe9a6;
+  --moss: #2c6a4d;
+  --moss-soft: #d9efe3;
+  --brick: #b3261e;
+  --brick-soft: #fde4e1;
+
+  /* Old variable names are kept so untouched admin pages inherit the new look */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --ovp-blue-50: #fff4cf;
+  --ovp-blue-100: #ffe9a6;
+  --ovp-blue-500: var(--marigold);
+  --ovp-blue: var(--ink);
+  --ovp-blue-dark: #2d2150;
+  --ovp-blue-900: var(--ink);
+  --ovp-green-100: var(--moss-soft);
+  --ovp-green: var(--moss);
+  --ovp-green-dark: #22543c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Familjen Grotesk Variable", system-ui, sans-serif;
+  --font-display: "Big Shoulders Display Variable", "Arial Narrow", sans-serif;
+}
+
+/* Re-map Tailwind's stock palette so every existing admin page picks up the
+   new colours, radii and flat (shadow-free) surfaces without being rewritten. */
+@theme {
+  --color-white: #fbfaff;
+  --color-slate-50: #efecf8;
+  --color-slate-100: #e4dff2;
+  --color-slate-200: #d2cbe5;
+  --color-slate-300: #b4abcf;
+  --color-slate-400: #8a7fa8;
+  --color-slate-500: #675d84;
+  --color-slate-600: #4d4467;
+  --color-slate-700: #3b3253;
+  --color-slate-800: #2a2041;
+  --color-slate-900: #1f1738;
+  --color-slate-950: #1b1233;
+  --color-blue-50: #fff4cf;
+  --color-blue-100: #ffe9a6;
+  --color-blue-500: #d99a00;
+  --color-blue-600: #1b1233;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.5rem;
+  --radius-3xl: 0.5rem;
+  --shadow-sm: 0 0 #0000;
+  --shadow-xl: 0 0 #0000;
+}
+
+html {
+  color-scheme: light;
+  background: var(--paper);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.005em;
+  line-height: 0.95;
+}
+
+/* Unlayered on purpose: beats Tailwind's text-3xl etc. on legacy admin pages */
+h1 { font-size: 3rem; }
+h2 { font-size: 1.875rem; }
+h3 { font-size: 1.5rem; }
+
+::selection { background: var(--marigold); color: var(--ink); }
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--marigold);
+}
+
+/* ------------------------------------------------------------------ *
+ * Wordmark and tally marks
+ * ------------------------------------------------------------------ */
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.tally { display: inline-flex; align-items: flex-end; gap: 3px; }
+.tally i {
+  width: 5px;
+  height: 20px;
+  border-radius: 1px;
+  background: var(--ink);
+}
+.tally i:last-child { background: transparent; box-shadow: inset 0 0 0 2px var(--ink); }
+
+.pips { display: flex; flex-wrap: wrap; gap: 4px; }
+.pips i {
+  width: 6px;
+  height: 22px;
+  border-radius: 1px;
+  background: var(--ink);
+}
+.pips i.open { background: transparent; box-shadow: inset 0 0 0 1.5px var(--ink); }
+
+/* ------------------------------------------------------------------ *
+ * Buttons and fields
+ * ------------------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0 1.25rem;
+  border-radius: 0.375rem;
+  border: 2px solid var(--ink);
+  background: var(--marigold);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: 3px 3px 0 var(--ink); }
+.btn-ghost { background: transparent; box-shadow: none; }
+.btn-ghost:hover { background: var(--paper-deep); box-shadow: none; transform: none; }
+.btn-ink { background: var(--ink); color: var(--sheet); box-shadow: 3px 3px 0 var(--marigold); }
+.btn-ink:hover { box-shadow: 4px 4px 0 var(--marigold); }
+.btn-whatsapp {
+  background: #25d366;
+  color: #063b1c;
+  border-color: #063b1c;
+  box-shadow: 3px 3px 0 #063b1c;
+}
+.btn-whatsapp:hover { background: #42e57d; box-shadow: 4px 4px 0 #063b1c; }
+.btn-sm { min-height: 2.5rem; padding: 0 0.9rem; font-size: 0.9rem; }
+
+.field { display: block; }
+.field > span {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.field > small { display: block; margin-top: 0.3rem; color: var(--ink-soft); font-size: 0.85rem; }
+.input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid var(--ink);
+  border-radius: 0.375rem;
+  background: var(--sheet);
+  color: var(--ink);
+  font: inherit;
+}
+.input::placeholder { color: #8a7fa8; }
+.input:focus { outline: none; box-shadow: 0 0 0 4px var(--marigold); }
+textarea.input { resize: vertical; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0 1rem;
+  border: 2px solid var(--ink);
+  border-radius: 0.375rem;
+  background: var(--sheet);
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+.chip input { position: absolute; opacity: 0; pointer-events: none; }
+.chip:has(input:checked) { background: var(--ink); color: var(--sheet); }
+.chip:has(input:focus-visible) { box-shadow: 0 0 0 4px var(--marigold); }
+
+.notice {
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  border: 2px solid var(--brick);
+  background: var(--brick-soft);
+  color: #6e130e;
+  font-weight: 600;
+}
+.notice-ok { border-color: var(--moss); background: var(--moss-soft); color: #173f2d; }
+
+/* ------------------------------------------------------------------ *
+ * Gateway ("/")
+ * ------------------------------------------------------------------ */
+.gate {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 1.25rem 1.25rem 2rem;
+  max-width: 76rem;
+  margin: 0 auto;
+}
+.gate-body {
+  display: grid;
+  gap: 2rem;
+  align-content: center;
+  padding: 2rem 0;
+}
+.gate-title {
+  font-size: clamp(3.75rem, 14vw, 9.5rem);
+  line-height: 0.86;
+  max-width: 9ch;
+}
+.gate-lede { margin-top: 1.25rem; max-width: 30ch; font-size: 1.2rem; color: var(--ink-soft); }
+.gate-foot { font-size: 0.9rem; color: var(--ink-soft); }
+
+@media (min-width: 62rem) {
+  .gate { padding: 1.75rem 2.5rem 2.5rem; }
+  .gate-body { grid-template-columns: 1.15fr 1fr; gap: 5rem; align-items: center; }
+}
+
+.roles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 2px solid var(--ink);
+  border-radius: 0.375rem;
+  overflow: hidden;
+  background: var(--sheet);
+}
+.roles button {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--ink);
+}
+.roles button + button { border-left: 2px solid var(--ink); }
+.roles button strong { display: block; font-family: var(--font-display); font-size: 1.6rem; line-height: 1; }
+.roles button span { font-size: 0.88rem; color: var(--ink-soft); }
+.roles button[aria-selected="true"] { background: var(--ink); color: var(--sheet); }
+.roles button[aria-selected="true"] span { color: var(--marigold-soft); }
+
+/* ------------------------------------------------------------------ *
+ * Ticket stub (event invitation, share preview)
+ * ------------------------------------------------------------------ */
+.ticket {
+  position: relative;
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  border-radius: 0.5rem;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.ticket-cut {
+  position: relative;
+  height: 0;
+  border-top: 2px dashed var(--ink);
+  margin: 0 0.75rem;
+}
+.ticket-cut::before,
+.ticket-cut::after {
+  content: "";
+  position: absolute;
+  top: -14px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+}
+.ticket-cut::before { left: -26px; clip-path: inset(0 0 0 50%); }
+.ticket-cut::after { right: -26px; clip-path: inset(0 50% 0 0); }
+
+.datebox {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 5.25rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--marigold);
+  border: 2px solid var(--ink);
+  border-radius: 0.375rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.9;
+}
+.datebox b { font-size: 3.5rem; font-weight: 900; }
+.datebox span { font-size: 1.35rem; }
+
+.join-title { font-size: clamp(2.75rem, 11vw, 5rem); line-height: 0.9; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .stamp-in { animation: stamp 0.45s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+  @keyframes stamp {
+    from { transform: scale(1.35) rotate(-6deg); opacity: 0; }
+    to { transform: scale(1) rotate(-2deg); opacity: 1; }
+  }
+}
+.stamp {
+  display: inline-block;
+  padding: 0.25rem 0.9rem;
+  border: 3px solid var(--moss);
+  border-radius: 0.375rem;
+  color: var(--moss);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 2.25rem;
+  line-height: 1;
+  transform: rotate(-2deg);
+}

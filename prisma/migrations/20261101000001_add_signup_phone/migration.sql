@@ -1,0 +1,2 @@
+ALTER TABLE "VolunteerSignup"
+ADD COLUMN "phone" TEXT NOT NULL DEFAULT '';
